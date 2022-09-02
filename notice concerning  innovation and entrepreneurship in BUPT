@@ -1,0 +1,22 @@
+# -*- coding: gbk -*-
+from bs4 import BeautifulSoup
+import urllib.request
+import json
+def getpage(url):
+      data = urllib.request.urlopen(url).read().decode("utf-8")
+      return data
+def startcatch():
+    res=[]
+    for i in range(0,11):#页数
+        data=getpage("http://www.bupt.edu.cn/xywh/cxcy.htm")#replace网页变量与不变量
+        soup=BeautifulSoup(data,"html5lib")
+        select_res=soup.select('li[id]>a[href]')#replace wp_news_w9为整个新闻页面的代码，a后的为每个新闻的span class
+        for row in select_res:
+              f=select_res.index(row)+1
+              res.append((i-1)*10+f)#replace 每一页的新闻数
+              print(row.get_text)
+              res.append(row.get_text())
+    return res
+res=startcatch()
+f=open("./k.txt","w",encoding="utf-8")
+f.write(json.dumps(res,ensure_ascii=False))
